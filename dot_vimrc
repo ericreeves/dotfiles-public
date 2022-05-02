@@ -1,0 +1,291 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Vundle 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    let iCanHazVundle=1
+    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle.."
+        echo ""
+        silent !mkdir -p ~/.vim/bundle
+        silent !git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/vundle
+        let iCanHazVundle=0
+    endif
+
+    set nocompatible              " be iMproved, required
+    filetype off                  " required
+    set rtp+=~/.vim/bundle/vundle/
+
+    call vundle#begin()
+    Plugin 'VundleVim/Vundle.vim'
+
+    "Add your bundles here
+    Plugin 'eparreno/vim-l9'
+    Plugin 'vim-airline/vim-airline'
+    " Plugin 'vim-airline/vim-airline-themes'
+    Plugin 'ctrlpvim/ctrlp.vim'
+    Plugin 'preservim/nerdtree'
+    Plugin 'unkiwii/vim-nerdtree-sync'
+	Plugin 'junegunn/fzf'
+	Plugin 'junegunn/fzf.vim'
+	Plugin 'airblade/vim-gitgutter'
+	Plugin 'tpope/vim-fugitive'
+	Plugin 'voldikss/vim-floaterm'
+    Plugin 'Syntastic'
+    Plugin 'tpope/vim-surround'
+    Plugin 'tpope/vim-eunuch'
+    Plugin 'terryma/vim-multiple-cursors'
+    Plugin 'frazrepo/vim-rainbow'
+    Plugin 'dense-analysis/ale' 
+    Plugin 'preservim/nerdcommenter'
+    Plugin 'wincent/command-t'
+    Plugin 'stephpy/vim-yaml'
+    Plugin 'baskerville/vim-sxhkdrc'
+    Plugin 'inkarkat/vim-CursorLineCurrentWindow'
+    Plugin 'chrisbra/Colorizer'
+    Plugin 'tomasiser/vim-code-dark'
+    Plugin 'hashivim/vim-consul'
+    Plugin 'hashivim/vim-nomadproject'
+    Plugin 'hashivim/vim-ottoproject'
+    Plugin 'hashivim/vim-packer'
+    Plugin 'hashivim/vim-terraform'
+    Plugin 'hashivim/vim-vagrant'
+    Plugin 'hashivim/vim-vaultproject'
+    Plugin 'jvirtanen/vim-hcl'
+    " Plugin 'dylanaraps/wal.vim'
+    " Plugin 'deviantfero/wpgtk.vim'
+
+    if iCanHazVundle == 0
+        echo "Installing Vundles, please ignore key map error messages"
+        echo ""
+        :PluginInstall
+    endif
+
+    call vundle#end()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Various Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Schemes
+set t_Co=256
+set t_ut=
+colorscheme codedark
+let g:airline_theme = 'codedark'
+autocmd ColorScheme * highlight Normal ctermbg=None
+autocmd ColorScheme * highlight NonText ctermbg=None
+" let s:cdBack = {'gui': '#101010', 'cterm': s:cterm00, 'cterm256': '234'}
+" let s:cdTabCurrent = {'gui': '#101010', 'cterm': s:cterm00, 'cterm256': '234'}
+" colorscheme wpgtk
+" colorscheme wpgtkAlt
+" colorscheme wal
+"
+syntax on
+set ttyfast " Send more characters for redraws
+filetype plugin on
+:set relativenumber
+
+" Auto cd to current directory
+set autochdir 
+
+set wildmenu "command-line completion
+set showcmd "shows partial commands
+set hlsearch "highlight searches
+set vi+=n
+set ignorecase "case insensitive search
+set smartcase
+set incsearch
+" Make double-<Esc> clear search highlights
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+
+let mapleader = "," " Remap leader key
+
+let g:CursorLineCurrentWindow_OptionNames = ['cursorline']
+
+
+nnoremap <leader>c :ColorToggle<CR>
+
+" set laststatus=2
+" Show the current cursor position
+" set ruler
+" Enable mouse use in all modes
+" set mouse=a
+" Set this to the name of your terminal that supports mouse codes.
+" Must be one of: xterm, xterm2, netterm, dec, jsbterm, pterm
+" set ttymouse=xterm-kitty
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Tab Behavior
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+    " Use filetype detection and file-based automatic indenting.
+    filetype plugin indent on
+
+    " Use actual tab chars in Makefiles.
+    autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+endif
+
+" For everything else, use a tab width of 4 space chars.
+set tabstop=4       " The width of a TAB is set to 4.
+                    " Still it is a \t. It is just that
+                    " Vim will interpret it to be having
+                    " a width of 4.
+set shiftwidth=4    " Indents will have a width of 4.
+set softtabstop=4   " Sets the number of columns for a TAB.
+set expandtab       " Expand TABs to spaces.
+""" END Tab Behavior
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Airline - https://github.com/vim-airline/vim-airline/
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+" let g:airline_theme='jellybeans'
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" NERDTree - https://github.com/preservim/nerdtree
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd VimEnter NERD_tree_1 enew | wincmd p | execute 'NERDTree '.argv()[0]
+" nnoremap <leader>n :NERDTreeFocus<CR>
+" nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
+" let g:NERDTreeDirArrowExpandable = '▸'
+" let g:NERDTreeDirArrowCollapsible = '▾'
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+function! NERDTreeToggleInCurDir()                                                                                                                                                             
+    " If NERDTree is open in the current buffer
+    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        exe ":NERDTreeClose"
+    else
+        if (expand("%:t") != '')
+            exe ":NERDTreeFind"
+        else
+            exe ":NERDTreeToggle"
+        endif
+    endif
+endfunction
+
+nnoremap <leader>n :call NERDTreeToggleInCurDir()<cr>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" FZF - https://github.com/junegunn/fzf.vim
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Open Window on Right
+let g:fzf_preview_window = 'right:50%'
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6  }  }
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R'
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" VimGutter - https://github.com/airblade/vim-gitgutter
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:gitgutter_max_signs = -1   " default value (otherwise)
+let g:gitgutter_set_sign_backgrounds = 0
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" vim-floaterm - https://github.com/voldikss/vim-floaterm
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:floaterm_keymap_toggle = '<F12>'
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.9
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Syntastic - https://github.com/vim-syntastic/syntastic
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
+ 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" vim-multiple-cursor - https://github.com/terryma/vim-multiple-cursors#quick-start
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" normal mode / visual mode
+" start: <C-n> start multicursor and add a virtual cursor + selection on the match
+" next: <C-n> add a new virtual cursor + selection on the next match
+" skip: <C-x> skip the next match
+" prev: <C-p> remove current virtual cursor + selection and go back on previous match
+" select all: <A-n> start multicursor and directly select all matches
+" You can now change the virtual cursors + selection with visual mode commands. For instance: c, s, I, A work without any issues. You could also go to normal mode by pressing v and use normal commands there.
+" At any time, you can press <Esc> to exit back to regular Vim.
+" NOTE: start with g<C-n> to match without boundaries (behaves like g* instead of *)
+" visual mode when multiple lines are selected
+" start: <C-n> add virtual cursors on each line
+"
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" vim-rainbow - https://github.com/frazrepo/vim-rainbow
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:rainbow_active = 1
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" NERD Commenter - https://github.com/preservim/nerdcommenter
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Bind commenting to C-/, which vim sees as C-_ for some reason
+let g:NERDSpaceDelims = 1
+nmap <C-_>   <Plug>NERDCommenterToggle %
+vmap <C-_>   <Plug>NERDCommenterToggle %<CR>gv
+let g:NERDTreeIndicatorMapCustom = {
+        \ 'Modified'  : '✹',
+    \ 'Staged'    : '✚',
+    \ 'Untracked' : '✭',
+    \ 'Renamed'   : '➜',
+    \ 'Unmerged'  : '═',
+    \ 'Deleted'   : '✖',
+    \ 'Dirty'     : '✗',
+    \ 'Clean'     : '✔︎',
+    \ 'Unknown'   : '?'
+    \ }
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" ale
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ale_python_mypy_options = '--strict-optional --ignore-missing-imports'
+let g:ale_sign_error=''  " \uf05e
+let g:ale_sign_warning=''  " \uf071
+"   \uf110
+" "   \uf00c
+let g:ale_linters = {
+            \ 'python': ['flake8', 'mypy'],
+            \ 'yaml': ['yamllint'],
+            \ 'latex': ['chktex'],
+            \ }
+
+let g:ale_fixers = {
+            \ 'python': ['isort', 'yapf'],
+            \ 'markdown': ['prettier'],
+            \ }
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" chezmoi
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Auto-Run 'chezmoi apply' after saving any file in ~/.local/share/chezmoi/
+autocmd BufWritePost ~/.local/share/chezmoi/* ! chezmoi apply --source-path "%"

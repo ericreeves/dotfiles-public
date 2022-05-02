@@ -1,0 +1,286 @@
+############################################################
+# Config Values
+############################################################
+# Apply Theme
+# if [ -f $HOME/.config/wpg/sequences ]; then
+    # cat $HOME/.config/wpg/sequences
+# fi
+
+{{ if not (.vm) }}
+# Setup Keyboard Mapping UNLESS we are in a VM
+if [ -x $HOME/.local/bin/keyboard-map-capslock-to-control-escape.sh ]; then
+	$HOME/.local/bin/keyboard-map-capslock-to-control-escape.sh
+fi
+{{ end }}
+
+# Rust / Cargo
+if [ -f $HOME/.cargo/env ]; then
+     source $HOME/.cargo/env
+fi
+
+# QT Theming
+#export QT_QPA_PLATFORMTHEME="qt5ct"
+#export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
+#export BROWSER=microsoft-edge-dev
+#export TERM=kitty
+#export MAIL=mailspring
+# export XDG_CURRENT_DESKTOP=Unity
+
+# FFF Configuration
+ff() {
+    fff "$@"
+    cd "$(cat "${XDG_CACHE_HOME:=${HOME}/.cache}/fff/.fff_d")"
+}
+
+# fasd Configuration
+if [ -x "$(command -v fasd)" ]; then
+    eval "$(fasd --init auto)"
+fi
+
+# SOPS Key
+#export SOPS_KMS_ARN="arn:aws:kms:us-east-1:948063967832:key/e56fefb0-b667-41e6-bd19-1075cb8db62e"
+
+# Old Docker Build Output
+export DOCKER_BUILDKIT=0
+
+# Launch Keychain if it's installed
+if [ -x "$(command -v keychain)" ]; then
+    eval $(keychain --eval --quiet id_rsa)
+fi
+
+#
+# AWS Vault Config
+# Vault Backend
+if pgrep kwallet >/dev/null; then
+    export AWS_VAULT_BACKEND=kwallet
+fi
+if [ -n $(grep -i microsoft /proc/sys/kernel/osrelease) ]; then 
+    export AWS_VAULT_BACKEND=file
+fi
+# Auto-completion for aws-vault
+if [ -x "$(command -v aws-vault)" ]; then
+    eval "$(aws-vault --completion-script-zsh)"
+fi
+# Alias
+alias ave='aws-vault exec'
+
+# Set Editor Variable
+# First try vim/vi so we can setup the vim alias
+if [ -x "$(command -v vim)" ]; then
+	export EDITOR="vim"
+	alias vi=vim
+	alias v=vim
+else [ -x "$(command -v vi)" ]
+	export EDITOR="vi"
+	alias v=vi
+fi
+
+# If VS Code is installed, use it
+#if [ -x "$(command -v code)" ]; then
+#	export EDITOR="code -w"
+#fi
+
+############################################################
+# Paths
+############################################################
+# Define XDG Paths
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# Tmux Plugin Manager
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins"
+
+# Executable Paths
+# Any Paths Here That Exist Will Be Added To $PATH
+for P in \
+    /usr/local/bin \
+    /usr/local/sbin \
+	/home/linuxbrew/.linuxbrew/bin \
+	/home/linuxbrew/.linuxbrew/sbin \
+	$HOME/Library/Python/3.9/bin \
+	$HOME/.config/rofi/bin \
+	$HOME/AppImages \
+	$HOME/.local/bin \
+	$HOME/bin \
+	; do
+		if [ -d "$P" ]; then
+			export PATH=$P:$PATH
+		fi
+done
+
+
+############################################################
+# HomeBrew
+############################################################
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    alias brewup='brew update && brew upgrade && brew upgrade --cask && brew cleanup; brew doctor; brew cleanup --prune 30'
+fi
+
+
+############################################################
+# Chezmoi
+############################################################
+alias cm=chezmoi
+alias cmdiff="chezmoi git pull -- --rebase && chezmoi diff"
+
+
+############################################################
+# Terminal
+############################################################
+#if [[ -z "${SSH_CONNECTION}" ]]; then
+#	export TERM=screen-256color
+#fi
+bindkey -v
+
+
+############################################################
+# Aliases
+############################################################
+
+#if [ -f $HOME/.local/share/lscolors.sh ]; then
+#	source ~/.local/share/lscolors.sh
+#fi
+
+# PyWal Colors
+#if [ -f $HOME/.cache/wal/colors-tty.sh ]; then
+#	source ~/.cache/wal/colors-tty.sh
+#fi
+
+# Setup Linux/Mac Aliases
+case `uname` in
+  Darwin)
+	# Emulate xclip on OSX
+	alias xclip=pbcopy
+    alias l="ls -l"
+  ;;
+  Linux)
+	# Emulate pcopy/pbpaste on Linux
+	alias pbcopy='xclip -selection clipboard'
+	alias pbpaste='xclip -selection clipboard -o'
+    # Colors for ls and grep
+    alias grep="grep --color=auto"
+    alias ls="ls --color=auto"
+    alias l="ls -l --color=auto"
+    alias sc="systemctl"
+    alias jc="journalctl"
+  ;;
+esac
+
+
+# Tail qtile
+alias qtail='tail -f ~/.local/share/qtile/qtile.log'
+
+
+############################################################
+# Git Aliases
+############################################################
+# alias gs='git status'
+# alias ga='git add'
+# alias gb='git branch'
+# alias gc='git commit'
+# alias gco='git checkout'
+# alias gl='git log'
+# alias gd='git diff'
+# alias gp='git push'
+# alias gg='git grep'
+# alias gf='git fetch'
+# alias gfa='git fetch --all'
+# alias fi='git fetch alertlogic; git rebase alertlogic/integration'
+# alias fm='git fetch alertlogic; git rebase alertlogic/master'
+# alias g='grep'
+
+
+############################################################
+# AWS/Kubernetes/Terraform
+############################################################
+alias kt='ktail'
+alias kc='kubectl'
+alias kns='kubens'
+alias kct='kubectx'
+alias kl='kubectl logs'
+alias kgp='kubectl get pod'
+alias kga='kubectl get all'
+alias kcb='kubectl --namespace=barkly-stack'
+alias kck='kubectl --namespace=kube-system'
+alias kcs='kubectl --namespace=stackstorm'
+
+alias kcx='kubectx'
+alias kns='kubens'
+
+alias tf='terraform'
+
+alias awl='awless'
+
+
+############################################################
+# System Tools (brew, etc)
+############################################################
+
+
+############################################################
+# Python
+############################################################
+# Virtualenvwrapper things
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/Development
+# export VIRTUALENVWRAPPER_SCRIPT=/usr/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper_lazy.sh
+
+
+############################################################
+# 1Password
+############################################################
+alias opl='eval $(op signin my)'
+alias opla='eval $(op signin alertlogic)'
+alias mfokta="op get totp 'Alert Logic Okta' | pbcopy"
+alias pwokta="op get item --fields 'Password' 'Alert Logic Okta' | pbcopy"
+alias mfaws="op get totp 'AWS - AL Master' | pbcopy"
+
+
+############################################################
+# StackStorm
+############################################################
+alias st2c='kubectl exec -it $(kubectl get --namespace stackstorm pod -l app=st2client,release=stackstorm -o jsonpath="{.items[0].metadata.name}") --namespace stackstorm -- st2'
+alias st2b='kubectl exec -it $(kubectl get --namespace stackstorm pod -l app=st2client,release=stackstorm -o jsonpath="{.items[0].metadata.name}") --namespace stackstorm -- bash'
+
+alias st2io='st2 --config-file=~/.st2/config.stackstorm-integration'
+alias st2po='st2 --config-file=~/.st2/config.stackstorm-prod-us-east-1'
+alias st2int='st2 --config-file=~/.st2/config.stackstorm-isolated-integration'
+alias st2us='st2 --config-file=~/.st2/config.stackstorm-isolated-us'
+alias st2uk='st2 --config-file=~/.st2/config.stackstorm-isolated-uk'
+
+
+############################################################
+# Nonsense
+############################################################
+#alias excuse='curl -s http://pages.cs.wisc.edu/~ballard/bofh/bofhserver.pl | awk -F '\''>'\'' '\''/is:/ { print $10 }'\'''
+alias excuse=bofhexcuse
+bofhexcuse() {
+  curl -s http://pages.cs.wisc.edu//\~ballard/bofh/bofhserver.pl | awk -F'>' '/is:/ { print $10 }'
+}
+alias fallacy=fallacygenerator
+fallacygenerator() {
+  echo -n $(shuf -n 1 ~/Dropbox/fallacies.txt) 'Fallacy' | awk '{print toupper(substr($0,0,1))tolower(substr($0,2))}' | sed -i 's/\r$//g' | pbcopy
+}
+# Bash insulter, lolol
+if [ -f $HOME/.local/etc/bash.command-not-found ]; then
+    . $HOME/.local/etc/bash.command-not-found
+fi
+# use Windows' git when working under C:\ drive
+#function git() {
+#  if $(mount | grep -q /mnt/c); then
+#    git.exe "$@"
+#  else
+#    command git "$@"
+#  fi
+#} 
+
+
+############################################################
+# ColorScript
+############################################################
+$HOME/.local/bin/colors-banner
+

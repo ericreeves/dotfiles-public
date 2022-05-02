@@ -1,0 +1,16 @@
+{{ $usage := promptString "usage" -}}
+{{ $vm := promptBool "vm" -}}
+
+data:
+    usage: {{ $usage | quote }}
+    vm: {{ $vm }}
+
+encryption: "age"
+
+age:
+    identity: "/home/eric/.ssh/id_rsa_chezmoi"
+    symmetric: true
+
+git:
+    autoCommit: true
+    autoPush: true

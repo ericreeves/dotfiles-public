@@ -1,0 +1,18 @@
+# This is Git's per-user configuration file.
+[user]
+{{ if (eq .usage "work" ) }}
+	name = Eric Reeves
+	email = eric@alertlogic.com
+{{ else }}
+	name = Eric Reeves
+	email = eric@alluvium.com
+{{ end }}
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+	squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
+[core]
+        autocrlf = true

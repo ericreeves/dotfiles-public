@@ -1,0 +1,5 @@
+#!/bin/bash
+/usr/bin/setxkbmap -layout us >/dev/null 2>&1
+/usr/bin/setxkbmap -option 'caps:ctrl_modifier' >/dev/null 2>&1 
+killall xcape >/dev/null 2>&1
+/usr/bin/xcape -e 'Caps_Lock=Escape' >/dev/null 2>&1

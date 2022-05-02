@@ -1,0 +1,103 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Clone zcomet if necessary
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+  command git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
+fi
+
+source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
+
+# Enable VI mode
+bindkey -v
+
+zcomet load romkatv/powerlevel10k
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+#TODO Install fzf pre-run
+
+#zcomet load bigH/git-fuzzy bin/git-fuzzy
+zcomet load paoloantinori/hhighlighter h.sh
+
+
+# history-search-multi-word
+zcomet load zdharma-continuum/history-search-multi-word
+
+# zsh-history-substring-search
+zcomet load zsh-users/zsh-history-substring-search
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+# History Settings
+HISTFILE=$HOME/.zhistory
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups # ignore duplication command history list
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+setopt share_history # share command history data
+
+
+# forgit
+zcomet load wfxr/forgit
+
+# diff-so-fancy
+#zcomet load zdharma-continuum/zsh-diff-so-fancy bin/git-dsf bin/diff-so-fancy
+
+# zsh-autopair
+zcomet load hlissner/zsh-autopair
+
+# zsh-navigation-tools
+zcomet load zdharma-continuum/zsh-navigation-tools
+
+# ZUI and Crasis
+zcomet load zdharma-continuum/zui
+#zcomet load zdharma-continuum/zinit-crasis
+
+# Gitignore plugin – commands gii and gi
+# zinit ice wait"2" lucid
+# zinit load voronkovich/gitignore.plugin.zsh
+
+# Autosuggestions & fast-syntax-highlighting
+zcomet load zdharma-continuum/fast-syntax-highlighting
+# zsh-autosuggestions
+zcomet load zsh-users/zsh-autosuggestions
+
+# Aloxaf/fzf-tab
+zcomet load Aloxaf/fzf-tab
+
+# supercrabtree/k
+zcomet load supercrabtree/k
+
+# blimmer/zsh-aws-vault
+zcomet load blimmer/zsh-aws-vault
+
+# zsh-users/zsh-completions
+zcomet load zsh-users/zsh-completions
+
+# trystan2k/zsh-tab-title
+zcomet load trystan2k/zsh-tab-title
+ZSH_TAB_TITLE_ADDITIONAL_TERMS='alacritty|kitty|foot'
+#ZSH_TAB_TITLE_ONLY_FOLDER=true
+#ZSH_TAB_TITLE_CONCAT_FOLDER_PROCESS=true
+#ZSH_TAB_TITLE_ENABLE_FULL_COMMAND=true
+#ZSH_TAB_TITLE_PREFIX='$USER@$HOST - '
+#ZSH_TAB_TITLE_SUFFIX='- $USER'
+
+#eval "$(starship init zsh)"
+
+source ~/.zshrc.config
+
+#if [ -f ~/.zshrc.token ]; then
+#	source ~/.zshrc.token
+#fi

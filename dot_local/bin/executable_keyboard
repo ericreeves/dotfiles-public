@@ -1,0 +1,10 @@
+#!/bin/bash
+(
+  /usr/bin/pkill xcape
+  sleep 1
+  /home/linuxbrew/.linuxbrew/bin/python3 -c 'from ctypes import *; X11 = cdll.LoadLibrary("libX11.so.6"); display = X11.XOpenDisplay(None); X11.XkbLockModifiers(display, c_uint(0x0100), c_uint(2), c_uint(0)); X11.XCloseDisplay(display)'
+  /usr/bin/setxkbmap -option 'caps:ctrl_modifier'
+  /usr/bin/xcape -e 'Caps_Lock=Escape' -t 100
+#  DISPLAY=:0.0 notify-send "External USB Connected"
+) &
+

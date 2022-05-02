@@ -1,0 +1,2 @@
+#!/bin/bash
+env TERM=rxvt-256color vis

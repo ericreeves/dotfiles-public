@@ -1,0 +1,28 @@
+#!/bin/bash
+if [ -z ${2} ]; then
+	echo "Usage: stcurl <CONFIG> <REQUEST_PATH>"
+        echo "~/.st2/config.<CONFIG> will be used as your config file" 
+	exit 1
+fi
+
+CONFIG_FILE=~/.st2/config.${1}
+shift
+
+if [ ! -f ${CONFIG_FILE} ]; then
+	echo "ERROR: ${CONFIG_FILE} does not exist"
+	exit 1
+fi
+
+REQUEST_PATH=$@
+
+
+USERNAME=$(grep username ${CONFIG_FILE} | awk '{print $3}')
+PASSWORD=$(grep password ${CONFIG_FILE} | awk '{print $3}')
+BASE_URL=$(grep base_url ${CONFIG_FILE} | awk '{print $3}')
+
+URL="${BASE_URL}/${REQUEST_PATH}"
+echo "URL: ${BASE_URL}/${REQUEST_PATH}"
+
+TOKEN=$(st2 --config-file=${CONFIG_FILE} auth ${USERNAME} -t -p ${PASSWORD})
+
+curl -s -X GET -H "User-Agent: python-requests/2.23.0" -H "Accept-Encoding: gzip, deflate" -H "Accept: */*" -H "Connection: keep-alive" -H "X-Auth-Token: ${TOKEN}" ${URL} | jq .

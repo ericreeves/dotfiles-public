@@ -1,0 +1,5 @@
+{{ if ne .chezmoi.os "linux" }}
+.config/ulauncher/
+.config/picom/
+.config/vis/
+{{ end }}

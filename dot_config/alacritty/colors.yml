@@ -1,0 +1,43 @@
+# Base16 oomox-Litex-1 256 - alacritty color config
+# oomox-Litex-1
+colors:
+  # Default colors
+  primary:
+    background: '0x000000'
+    foreground: '0xffffff'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  cursor:
+    text: '0x111111'
+    cursor: '0xffffff'
+
+  # Normal colors
+  normal:
+    black:   '0x000000'
+    red:     '0xcf614d'
+    green:   '0x677c4d'
+    yellow:  '0x7f7819'
+    blue:    '0x5378c6'
+    magenta: '0xc95bd3'
+    cyan:    '0x0d7f99'
+    white:   '0xffffff'
+
+  # Bright colors
+  bright:
+    black:   '0x888888'
+    red:     '0xcf614d'
+    green:   '0x677c4d'
+    yellow:  '0x7f7819'
+    blue:    '0x5378c6'
+    magenta: '0xc95bd3'
+    cyan:    '0x0d7f99'
+    white:   '0xffffff'
+
+  indexed_colors:
+    - { index: 16, color: '0x7c6819' }
+    - { index: 17, color: '0x91501e' }
+    - { index: 18, color: '0x000000' }
+    - { index: 19, color: '0x231920' }
+    - { index: 20, color: '0x252525' }
+    - { index: 21, color: '0xefddec' }
+
